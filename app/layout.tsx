@@ -1,11 +1,13 @@
 import "./global_styles.css";
 import Header from "./Header";
+import { unstable_getServerSession } from "next-auth/next";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await unstable_getServerSession();
   return (
     <html lang="en">
       {/*
@@ -14,7 +16,7 @@ export default function RootLayout({
       */}
       <head />
       <body>
-        <Header />
+        <Header session={session} />
         {children}
       </body>
     </html>

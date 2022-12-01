@@ -4,9 +4,11 @@ import React from "react";
 import LogoutButton from "./LogoutButton";
 import { unstable_getServerSession } from "next-auth/next";
 
-const Header = async () => {
-  const session = await unstable_getServerSession();
+type Props = {
+  session: Awaited<ReturnType<typeof unstable_getServerSession>>;
+};
 
+const Header = ({ session }: Props) => {
   if (session)
     return (
       <header className="sticky top-0 z-50 flex items-center justify-between bg-white p-10 shadow-sm">
