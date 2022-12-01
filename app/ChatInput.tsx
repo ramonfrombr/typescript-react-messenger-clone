@@ -6,8 +6,13 @@ import { v4 as uuid } from "uuid";
 import { Message } from "../typings";
 import useSWR from "swr";
 import fetcher from "../utils/fetchMessages";
+import { unstable_getServerSession } from "next-auth/next";
 
-const ChatInput = () => {
+type Props = {
+  session: Awaited<ReturnType<typeof unstable_getServerSession>>;
+};
+
+const ChatInput = ({ session }: Props) => {
   const [input, setInput] = useState<string>("");
 
   const { data: messages, error, mutate } = useSWR("/api/getMessages", fetcher);
@@ -15,7 +20,7 @@ const ChatInput = () => {
   const addMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!input) return;
+    if (!input || !session) return;
 
     const messageToSend = input;
 
@@ -27,10 +32,9 @@ const ChatInput = () => {
       id,
       message: messageToSend,
       created_at: Date.now(),
-      username: "Neymar",
-      profilePic:
-        "https://icdn.football-espana.net/wp-content/uploads/2022/06/Neymar-Junior2.jpeg",
-      email: "neymar@gmail.com",
+      username: session?.user?.name!,
+      profilePic: session?.user?.image!,
+      email: session?.user?.email!,
     };
 
     const uploadMessageToUpstash = async () => {
@@ -60,6 +64,7 @@ const ChatInput = () => {
     >
       <input
         value={input}
+        disabled={!session}
         onChange={(e) => setInput(e.target.value)}
         type="text"
         placeholder="Enter message here..."

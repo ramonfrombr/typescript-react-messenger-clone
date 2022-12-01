@@ -6,7 +6,11 @@ import { Message } from "../typings";
 import fetcher from "../utils/fetchMessages";
 import MessageComponent from "./MessageComponent";
 
-const MessageList = () => {
+type MessageListProps = {
+    initialMessages: Message[];
+};
+
+const MessageList = ({ initialMessages }: MessageListProps) => {
     const {
         data: messages,
         error,
@@ -38,7 +42,7 @@ const MessageList = () => {
 
     return (
         <div className="mx-auto max-w-2xl space-y-5 px-5 pt-8 pb-32 xl:max-w-4xl">
-            {messages?.map((message) => (
+            {(messages || initialMessages).map((message) => (
                 <MessageComponent key={message.id} message={message} />
             ))}
         </div>

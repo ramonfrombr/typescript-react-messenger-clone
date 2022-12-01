@@ -8,6 +8,7 @@ const nextConfig = {
       "links.papareact.com",
       "upload.wikimedia.org",
       "icdn.football-espana.net",
+      "platform-lookaside.fbsbx.com",
     ],
   },
 };

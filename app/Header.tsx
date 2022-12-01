@@ -2,25 +2,26 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import LogoutButton from "./LogoutButton";
+import { unstable_getServerSession } from "next-auth/next";
 
-const Header = () => {
-  const session = false;
+const Header = async () => {
+  const session = await unstable_getServerSession();
 
   if (session)
     return (
-      <header className="sticky top-0 z-50 bg-white flex justify-between items-center p-10 shadow-sm">
+      <header className="sticky top-0 z-50 flex items-center justify-between bg-white p-10 shadow-sm">
         <div className="flex space-x-2">
           <Image
-            className="rounded-full mx-2 object-contain"
+            className="mx-2 rounded-full object-contain"
             height={10}
             width={50}
-            src="https://links.papareact.com/jne"
+            src={session.user?.image!}
             alt="Profile Picture"
           />
 
           <div>
             <p className="text-blue-400">Logged in as:</p>
-            <p className="font-bold text-lg">Ramon Rodrigues</p>
+            <p className="text-lg font-bold">{session.user?.name}</p>
           </div>
         </div>
 
@@ -28,9 +29,9 @@ const Header = () => {
       </header>
     );
   return (
-    <header className="sticky top-0 z-50 bg-white flex justify-center items-center p-10 shadow-sm">
+    <header className="sticky top-0 z-50 flex items-center justify-center bg-white p-10 shadow-sm">
       <div className="flex flex-col items-center space-y-5">
-        <div className="flex space-x-2 items-center">
+        <div className="flex items-center space-x-2">
           <Image
             height={10}
             width={50}
@@ -41,12 +42,13 @@ const Header = () => {
           <p className="text-blue-400">Welcome to Meta Messenger</p>
         </div>
 
+        {/*
         <Link
           href="/auth/signin"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
         >
           Sign In
-        </Link>
+        </Link> */}
       </div>
     </header>
   );
